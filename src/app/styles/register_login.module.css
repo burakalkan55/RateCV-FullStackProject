@@ -1,0 +1,102 @@
+/* register.module.css */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f2f5, #ffffff);
+  min-height: 100vh;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.form {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: slideUp 0.8s ease forwards;
+  transition: transform 0.3s ease;
+}
+
+.form:hover {
+  transform: scale(1.01);
+}
+
+.title {
+  margin: 0;
+  font-size: 2rem;
+  color: #1a237e;
+  text-align: center;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: #5c6bc0;
+  text-align: center;
+}
+
+.input {
+  padding: 0.9rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid #c5cae9;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.input:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+  outline: none;
+  background-color: #ffffff;
+}
+
+.button {
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #3f51b5, #1a237e);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #5c6bc0, #283593);
+  box-shadow: 0 8px 16px rgba(63, 81, 181, 0.2);
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 0.95rem;
+  text-align: center;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.success {
+  color: #388e3c;
+  font-size: 0.95rem;
+  text-align: center;
+  animation: fadeIn 0.4s ease-in-out;
+}
