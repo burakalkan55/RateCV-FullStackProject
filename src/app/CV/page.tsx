@@ -8,12 +8,6 @@ export default async function PublicCVsPage() {
   // Fetch users with a CV
   const users = await prisma.user.findMany({
     where: { cvUrl: { not: null } },
-    select: {
-      id: true,
-      name: true,
-      cvUrl: true,
-      avgRating: true,
-    },
     orderBy: { id: 'desc' },
   })
 
