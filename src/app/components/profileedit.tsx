@@ -42,8 +42,8 @@ export default function ProfileEdit({ currentName, currentBio }: ProfileEditProp
       setTimeout(() => {
         window.location.reload()
       }, 1000)
-    } catch (err: any) {
-      setMessage(`Error: ${err.message}`)
+    } catch (err) {
+      setMessage(`Error: ${err instanceof Error ? err.message : String(err)}`)
       console.error('Update error:', err)
     } finally {
       setLoading(false)

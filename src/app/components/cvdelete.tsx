@@ -26,9 +26,9 @@ export default function DeleteCVButton() {
       // CV silindiğinde profil sayfasını yenile
       window.dispatchEvent(new Event('profileUpdated'))
       window.location.reload()
-    } catch (err: any) {
+    } catch (err) {
       console.error('Delete error:', err)
-      alert(`Error: ${err.message}`)
+      alert(`Error: ${err instanceof Error ? err.message : String(err)}`)
     } finally {
       setLoading(false)
     }

@@ -14,7 +14,7 @@ export async function POST() {
     const token = (await cookies()).get('token')?.value
     if (!token) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
 
-    let userData
+    let userData: jwt.JwtPayload | string
     try {
       userData = jwt.verify(token, process.env.JWT_SECRET!)
     } catch {
@@ -23,7 +23,7 @@ export async function POST() {
 
     // Kullanıcıyı bul
     const user = await prisma.user.findUnique({
-      where: { email: (userData as any).email },
+      where: { email: (userData as jwt.JwtPayload).email },
       select: { id: true, cvUrl: true },
     })
 

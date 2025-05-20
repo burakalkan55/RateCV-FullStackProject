@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    let userData
+    let userData: jwt.JwtPayload | string
     try {
       userData = jwt.verify(token, process.env.JWT_SECRET!)
     } catch {
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     }    // Kullanıcının önceden verdiği oyu bul
     const rating = await prisma.rating.findFirst({
       where: {
-        voterId: Number((userData as any).id),
+        voterId: Number((userData as jwt.JwtPayload).id),
         userId: Number(targetUserId)
       }
     })

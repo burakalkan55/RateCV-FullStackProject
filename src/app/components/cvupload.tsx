@@ -38,8 +38,8 @@ export default function CVUploadForm() {
       setCvUrl(data.url)
       // Event'i tetikleyerek profil sayfasını yenile
       window.dispatchEvent(new Event('profileUpdated'))
-    } catch (err: any) {
-      setMessage(`❌ ${err.message}`)
+    } catch (err) {
+      setMessage(`❌ ${err instanceof Error ? err.message : String(err)}`)
       console.error('Upload error:', err)
     } finally {
       setLoading(false)

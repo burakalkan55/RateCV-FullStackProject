@@ -15,7 +15,7 @@ export default function Navbar() {
       try {
         const res = await fetch('/api/profile', { method: 'GET' })
         setIsLoggedIn(res.ok)
-      } catch (error) {
+      } catch {
         setIsLoggedIn(false)
       }
     }

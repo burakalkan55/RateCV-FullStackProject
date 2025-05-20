@@ -3,8 +3,6 @@
 import Link from 'next/link'
 import styles from './styles/homepage.module.css'
 
-import Image from 'next/image'
-
 export default function Home() {
   return (
     <div className={styles.wrapper}>
