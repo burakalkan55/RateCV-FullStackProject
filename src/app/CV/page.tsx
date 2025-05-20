@@ -7,8 +7,8 @@ import Searchbar from '../components/searchBar'
 
 const prisma = new PrismaClient()
 
-export default async function CVListPage({ searchParams }: { searchParams?: { q?: string } }) {
-  const query = searchParams?.q?.toLowerCase() || ''
+export default async function CVListPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
+  const query = (typeof searchParams?.q === 'string' ? searchParams.q : Array.isArray(searchParams?.q) ? searchParams.q[0] : '').toLowerCase() || ''
 
   let usersWithCV = await prisma.user.findMany({
     where: {
