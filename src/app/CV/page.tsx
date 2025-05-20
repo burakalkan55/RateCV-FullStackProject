@@ -4,7 +4,7 @@ import Link from 'next/link'
 import styles from '../styles/publiccvs.module.css'
 import RateButton from '../components/rateButton'
 import Searchbar from '../components/searchBar'
-import { Metadata } from 'next'
+
 
 // Create a singleton Prisma client to prevent multiple instances in development
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
