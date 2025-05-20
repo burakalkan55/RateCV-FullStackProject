@@ -25,11 +25,11 @@ export default async function PublicProfile({ params }: { params: { id: string }
       <h1 className={styles.title}>{user.name}'s Profile</h1>
 
       <div className={styles.infoBox}>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Bio:</strong> {user.bio || 'No bio yet.'}</p>
-        <p><strong>CV:</strong> {user.cvUrl ? <Link href={user.cvUrl} target="_blank">View CV</Link> : 'No CV uploaded.'}</p>
-        <p><strong>Average Rating:</strong> {avg} / 5</p>
-        <p><strong>Received Votes:</strong> {user.receivedRatings.length}</p>
+        <p className={styles.info}><span>Email:</span> {user.email}</p>
+        <p className={styles.info}><span>About:</span> {user.bio || "This user hasn&apos;t added an about section yet."}</p>
+        <p className={styles.info}><span>CV:</span> {user.cvUrl ? <Link href={user.cvUrl} target="_blank">View CV</Link> : 'No CV uploaded.'}</p>
+        <p className={styles.info}><span>Average Rating:</span> {avg} / 5</p>
+        <p className={styles.info}><span>Received Votes:</span> {user.receivedRatings.length}</p>
       </div>
     </div>
   )
