@@ -4,8 +4,15 @@ import styles from '../styles/publiccvs.module.css'
 
 const prisma = new PrismaClient()
 
+type UserWithAvg = {
+  id: number
+  name: string
+  cvUrl: string | null
+  avgRating: number
+}
+
 export default async function PublicCVsPage() {
-  const users = await prisma.user.findMany({
+  const users: UserWithAvg[] = await prisma.user.findMany({
     where: { cvUrl: { not: null } },
     orderBy: { id: 'desc' },
   })
@@ -31,11 +38,7 @@ export default async function PublicCVsPage() {
                 View CV
               </a>
               <div className={styles.avgText}>
-                Average Rating:{' '}
-                {(user as any).avgRating
-                  ? (user as any).avgRating.toFixed(1)
-                  : 'Not rated yet'}{' '}
-                / 5
+                Average Rating: {user.avgRating ? user.avgRating.toFixed(1) : 'Not rated yet'} / 5
               </div>
             </div>
           ))
