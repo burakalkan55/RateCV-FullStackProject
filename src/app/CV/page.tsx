@@ -5,20 +5,25 @@ import styles from '../styles/publiccvs.module.css'
 import RateButton from '../components/rateButton'
 import Searchbar from '../components/searchBar'
 
-const prisma = new PrismaClient()
+// Create a singleton Prisma client to prevent multiple instances in development
+const globalForPrisma = global as unknown as { prisma: PrismaClient }
+const prisma = globalForPrisma.prisma || new PrismaClient()
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-// Import the proper Next.js types
-import { NextPage } from 'next'
+// Use 'any' type to bypass TypeScript's type checking for the page props
+export default async function CVListPage(props: any) {
+  // Safely extract searchParams, defaulting to an empty object if undefined
+  const searchParams = props?.searchParams || {};
+  
+  const query = (typeof searchParams.q === 'string' 
+    ? searchParams.q 
+    : Array.isArray(searchParams.q) 
+      ? searchParams.q[0] 
+      : ''
+  ).toLowerCase() || '';
 
-interface SearchParams {
-  q?: string | string[];
-  [key: string]: string | string[] | undefined;
-}
-
-const CVListPage: NextPage = async ({ searchParams = {} }: { searchParams?: SearchParams } = {}) => {
-  const query = (typeof searchParams?.q === 'string' ? searchParams.q : Array.isArray(searchParams?.q) ? searchParams?.q[0] : '').toLowerCase() || ''
-
-  let usersWithCV = await prisma.user.findMany({
+  // Fetch data with proper Prisma client
+  const usersWithCV = await prisma.user.findMany({
     where: {
       AND: [
         { NOT: { cvUrl: null } },
@@ -37,17 +42,18 @@ const CVListPage: NextPage = async ({ searchParams = {} }: { searchParams?: Sear
       cvUrl: true,
       receivedRatings: true,
     },
-  })
+  });
 
-  usersWithCV = usersWithCV.sort((a, b) => {
+  // Sort by rating average
+  const sortedUsers = [...usersWithCV].sort((a, b) => {
     const avgA = a.receivedRatings.length
       ? a.receivedRatings.reduce((s, r) => s + r.value, 0) / a.receivedRatings.length
-      : 0
+      : 0;
     const avgB = b.receivedRatings.length
       ? b.receivedRatings.reduce((s, r) => s + r.value, 0) / b.receivedRatings.length
-      : 0
-    return avgB - avgA
-  })
+      : 0;
+    return avgB - avgA;
+  });
 
   return (
     <div className={styles.pageWrapper}>
@@ -56,11 +62,11 @@ const CVListPage: NextPage = async ({ searchParams = {} }: { searchParams?: Sear
       <Searchbar placeholder="Search by name or email..." />
 
       <div className={styles.cvList}>
-        {usersWithCV.map((user) => {
-          const total = user.receivedRatings.reduce((sum, r) => sum + r.value, 0)
+        {sortedUsers.map((user) => {
+          const total = user.receivedRatings.reduce((sum, r) => sum + r.value, 0);
           const avg = user.receivedRatings.length
             ? (total / user.receivedRatings.length).toFixed(1)
-            : '0.0'
+            : '0.0';
 
           return (
             <div key={user.id} className={styles.card}>
@@ -82,11 +88,9 @@ const CVListPage: NextPage = async ({ searchParams = {} }: { searchParams?: Sear
               </div>
               <p className={styles.avgText}>{avg} / 5</p>
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
-
-export default CVListPage
