@@ -1,3 +1,5 @@
+// app/CV/page.tsx
+
 import Link from 'next/link'
 import { PrismaClient } from '@prisma/client'
 import styles from '../styles/publiccvs.module.css'
@@ -5,10 +7,16 @@ import styles from '../styles/publiccvs.module.css'
 const prisma = new PrismaClient()
 
 export default async function PublicCVsPage() {
-  // Fetch users with a CV
+  // Fetch users with CVs and avgRating
   const users = await prisma.user.findMany({
     where: { cvUrl: { not: null } },
     orderBy: { id: 'desc' },
+    select: {
+      id: true,
+      name: true,
+      cvUrl: true,
+      avgRating: true,
+    },
   })
 
   return (
