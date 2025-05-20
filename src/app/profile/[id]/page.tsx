@@ -7,8 +7,9 @@ import Link from 'next/link'
 const prisma = new PrismaClient()
 
 export default async function PublicProfile({ params }: { params: { id: string } }) {
+  const awaitedParams = await params;
   const user = await prisma.user.findUnique({
-    where: { id: Number(params.id) },
+    where: { id: Number(awaitedParams.id) },
     include: {
       receivedRatings: true,
     },

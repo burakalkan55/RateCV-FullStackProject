@@ -7,6 +7,9 @@ export const metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+}
+
+export const viewport = {
   themeColor: '#2563eb',
 }
 

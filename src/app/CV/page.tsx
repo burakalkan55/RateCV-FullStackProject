@@ -4,10 +4,12 @@ import Link from 'next/link'
 import styles from '../styles/publiccvs.module.css'
 import RateButton from '../components/rateButton'
 import Searchbar from '../components/searchBar'
+import { cookies } from 'next/headers'
 
 const prisma = new PrismaClient()
 
-export default async function CVListPage({ searchParams }: { searchParams: { q?: string } }) {
+export default async function CVListPage(props: any) {
+  const searchParams = props.searchParams ? await props.searchParams : {};
   const query = searchParams.q?.toLowerCase() || ''
 
   let usersWithCV = await prisma.user.findMany({
