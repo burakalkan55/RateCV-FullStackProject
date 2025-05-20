@@ -1,5 +1,3 @@
-// app/CV/page.tsx
-
 import Link from 'next/link'
 import { PrismaClient } from '@prisma/client'
 import styles from '../styles/publiccvs.module.css'
@@ -7,16 +5,10 @@ import styles from '../styles/publiccvs.module.css'
 const prisma = new PrismaClient()
 
 export default async function PublicCVsPage() {
-  // Fetch users with CVs and avgRating
+  // select kullanmadan tüm alanları getiriyoruz
   const users = await prisma.user.findMany({
     where: { cvUrl: { not: null } },
     orderBy: { id: 'desc' },
-    select: {
-      id: true,
-      name: true,
-      cvUrl: true,
-      avgRating: true,
-    },
   })
 
   return (
@@ -26,7 +18,7 @@ export default async function PublicCVsPage() {
         {users.length === 0 ? (
           <p>No CVs have been uploaded yet.</p>
         ) : (
-          users.map(user => (
+          users.map((user) => (
             <div key={user.id} className={styles.card}>
               <Link href={`/profile/${user.id}`} className={styles.nameLink}>
                 <h2>{user.name}</h2>
@@ -40,7 +32,11 @@ export default async function PublicCVsPage() {
                 View CV
               </a>
               <div className={styles.avgText}>
-                Average Rating : {user.avgRating ? user.avgRating.toFixed(1) : 'Not rated yet'} / 5
+                Average Rating:{' '}
+                {user.avgRating && typeof user.avgRating === 'number'
+                  ? user.avgRating.toFixed(1)
+                  : 'Not rated yet'}{' '}
+                / 5
               </div>
             </div>
           ))
