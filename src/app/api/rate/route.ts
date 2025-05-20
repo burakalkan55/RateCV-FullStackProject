@@ -33,6 +33,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'You cannot rate your own CV' }, { status: 400 })
     }
 
+    let updatedRatingEntity;
+
     // Kullanıcının önceden verdiği oyu kontrol et
     const existingRating = await prisma.rating.findFirst({
       where: {
@@ -47,11 +49,8 @@ export async function POST(req: NextRequest) {
         where: { id: existingRating.id },
         data: { value }
       })
+      updatedRatingEntity = updatedRating;
       
-      return NextResponse.json({ 
-        message: 'Rating updated successfully', 
-        rating: updatedRating 
-      })
     } else {
       // Yeni oy ekle
       const newRating = await prisma.rating.create({
@@ -61,12 +60,33 @@ export async function POST(req: NextRequest) {
           voterId: userData.id
         }
       })
-
-      return NextResponse.json({ 
-        message: 'Rating submitted successfully', 
-        rating: newRating 
-      })
+      updatedRatingEntity = newRating;
     }
+
+    // Calculate and update average rating
+    const ratings = await prisma.rating.findMany({
+      where: { userId: Number(targetUserId) }
+    });
+
+    const totalRating = ratings.reduce((acc, rating) => acc + rating.value, 0);
+    const avgRating = ratings.length > 0 ? totalRating / ratings.length : 0;
+
+    await prisma.user.update({
+      where: { id: Number(targetUserId) },
+      data: { avgRating: avgRating } // Ensure correct field name and value assignment
+    });
+
+    if (updatedRatingEntity) {
+      return NextResponse.json({ 
+        message: existingRating ? 'Rating updated successfully' : 'Rating submitted successfully', 
+        rating: updatedRatingEntity,
+        avgRating: avgRating 
+      });
+    } else {
+      // This case should ideally not be reached if logic is correct
+      return NextResponse.json({ message: 'Error processing rating' }, { status: 500 });
+    }
+
   } catch (error) {
     console.error('RATING ERROR:', error)
     return NextResponse.json({ message: 'Server error' }, { status: 500 })

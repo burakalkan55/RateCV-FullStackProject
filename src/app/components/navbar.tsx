@@ -38,6 +38,7 @@ export default function Navbar() {
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
           <span>RateMyCV</span>
+        
         </Link>
 
         <nav className={`${styles.nav} ${menuOpen ? styles.show : ''}`}>

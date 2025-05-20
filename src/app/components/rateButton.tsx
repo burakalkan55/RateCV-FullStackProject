@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Star } from 'lucide-react'
 import styles from '../styles/publiccvs.module.css'
 
-export default function RateButton({ targetUserId }: { targetUserId: number; currentAvg: number }) {
+export default function RateButton({ targetUserId }: { targetUserId: number }) {
   const [selected, setSelected] = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')

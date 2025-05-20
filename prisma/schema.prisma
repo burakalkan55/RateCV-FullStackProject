@@ -16,6 +16,7 @@ model User {
   password  String
   cvUrl     String?
   bio       String?
+  avgRating Float    @default(0)
   createdAt DateTime @default(now())
 
   receivedRatings Rating[] @relation("ReceivedRatings")
