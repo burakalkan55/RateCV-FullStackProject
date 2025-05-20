@@ -13,16 +13,12 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 // Create proper type definitions
 interface PageProps {
-  params?: Promise<{ [key: string]: string | undefined }>;
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 // Use the correct Next.js App Router page component signature
-export default async function CVListPage({ searchParams }: PageProps = {}) {
-  let searchParamsObj: { [key: string]: string | string[] | undefined } = {};
-  if (searchParams) {
-    searchParamsObj = await searchParams;
-  }
+export default async function CVListPage({ searchParams }: PageProps) {
+  const searchParamsObj = searchParams || {};
   const query = (typeof searchParamsObj.q === 'string' 
     ? searchParamsObj.q 
     : Array.isArray(searchParamsObj.q) 
