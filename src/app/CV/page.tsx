@@ -7,12 +7,15 @@ import Searchbar from '../components/searchBar'
 
 const prisma = new PrismaClient()
 
-// Update the type definition to match Next.js page props requirement
-export default async function CVListPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+// Import the proper Next.js types
+import { NextPage } from 'next'
+
+interface SearchParams {
+  q?: string | string[];
+  [key: string]: string | string[] | undefined;
+}
+
+const CVListPage: NextPage = async ({ searchParams = {} }: { searchParams?: SearchParams } = {}) => {
   const query = (typeof searchParams?.q === 'string' ? searchParams.q : Array.isArray(searchParams?.q) ? searchParams?.q[0] : '').toLowerCase() || ''
 
   let usersWithCV = await prisma.user.findMany({
@@ -85,3 +88,5 @@ export default async function CVListPage({
     </div>
   )
 }
+
+export default CVListPage
