@@ -22,7 +22,7 @@ export default async function PublicProfile({ params }: { params: { id: string }
 
   return (
     <div className={styles.profileWrapper}>
-      <h1 className={styles.title}>{user.name}'s Profile</h1>
+      <h1 className={styles.title}>{user.name}&apos;s Profile</h1>
 
       <div className={styles.infoBox}>
         <p className={styles.info}><span>Email:</span> {user.email}</p>
