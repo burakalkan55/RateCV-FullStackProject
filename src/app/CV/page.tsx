@@ -11,18 +11,16 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient }
 const prisma = globalForPrisma.prisma || new PrismaClient()
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-// Create proper type definitions
-interface PageProps {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
 // Use the correct Next.js App Router page component signature
-export default async function CVListPage({ searchParams }: PageProps) {
-  const searchParamsObj = searchParams || {};
-  const query = (typeof searchParamsObj.q === 'string' 
-    ? searchParamsObj.q 
-    : Array.isArray(searchParamsObj.q) 
-      ? searchParamsObj.q[0] 
+export default async function CVListPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = (typeof searchParams.q === 'string' 
+    ? searchParams.q 
+    : Array.isArray(searchParams.q) 
+      ? searchParams.q[0] 
       : ''
   ).toLowerCase() || '';
 
