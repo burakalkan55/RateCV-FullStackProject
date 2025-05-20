@@ -4,22 +4,22 @@ import Link from 'next/link'
 import styles from '../styles/publiccvs.module.css'
 import RateButton from '../components/rateButton'
 import Searchbar from '../components/searchBar'
+import { Metadata } from 'next'
 
 // Create a singleton Prisma client to prevent multiple instances in development
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 const prisma = globalForPrisma.prisma || new PrismaClient()
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-// Define a more specific type for page props
-type CVPageProps = {
-  params: Record<string, string>;
-  searchParams: Record<string, string | string[] | undefined>;
+// Create proper type definitions
+interface PageProps {
+  params: { [key: string]: string | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function CVListPage(props: CVPageProps) {
-  // Safely extract searchParams
-  const { searchParams } = props;
-  
+// Use the correct Next.js App Router page component signature
+export default async function CVListPage({ searchParams }: PageProps) {
+  // Safely extract the query parameter
   const query = (typeof searchParams.q === 'string' 
     ? searchParams.q 
     : Array.isArray(searchParams.q) 
@@ -27,7 +27,7 @@ export default async function CVListPage(props: CVPageProps) {
       : ''
   ).toLowerCase() || '';
 
-  // Fetch data with proper Prisma client
+  // Fetch data using the Prisma client
   const usersWithCV = await prisma.user.findMany({
     where: {
       AND: [
