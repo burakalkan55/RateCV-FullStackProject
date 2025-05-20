@@ -40,7 +40,7 @@ export default async function PublicCVsPage() {
                 View CV
               </a>
               <div className={styles.avgText}>
-                Average Rating : {user.avgRating ? user.avgRating.toFixed(1) : 'Not rated yet'} / 5
+                Average Rating: {user.avgRating ? user.avgRating.toFixed(1) : 'Not rated yet'} / 5
               </div>
             </div>
           ))
