@@ -1,4 +1,4 @@
-// app/cvs/page.tsx
+// app/CV/page.tsx
 import { PrismaClient } from '@prisma/client'
 import Link from 'next/link'
 import styles from '../styles/publiccvs.module.css'
@@ -7,8 +7,13 @@ import Searchbar from '../components/searchBar'
 
 const prisma = new PrismaClient()
 
-export default async function CVListPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
-  const query = (typeof searchParams?.q === 'string' ? searchParams.q : Array.isArray(searchParams?.q) ? searchParams.q[0] : '').toLowerCase() || ''
+// Update the type definition to match Next.js page props requirement
+export default async function CVListPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = (typeof searchParams?.q === 'string' ? searchParams.q : Array.isArray(searchParams?.q) ? searchParams?.q[0] : '').toLowerCase() || ''
 
   let usersWithCV = await prisma.user.findMany({
     where: {
