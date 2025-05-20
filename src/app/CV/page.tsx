@@ -10,10 +10,15 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient }
 const prisma = globalForPrisma.prisma || new PrismaClient()
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-// Use 'any' type to bypass TypeScript's type checking for the page props
-export default async function CVListPage(props: any) {
-  // Safely extract searchParams, defaulting to an empty object if undefined
-  const searchParams = props?.searchParams || {};
+// Define a more specific type for page props
+type CVPageProps = {
+  params: Record<string, string>;
+  searchParams: Record<string, string | string[] | undefined>;
+}
+
+export default async function CVListPage(props: CVPageProps) {
+  // Safely extract searchParams
+  const { searchParams } = props;
   
   const query = (typeof searchParams.q === 'string' 
     ? searchParams.q 
